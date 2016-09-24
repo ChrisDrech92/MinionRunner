@@ -8,8 +8,6 @@ public class inputCheck : MonoBehaviour {
     public InputField firstName;
     public InputField lastName;
     public InputField email;
-    public InputField dob;
-    public InputField pn;
     public InputField password;
 
     public GameObject instructions;
@@ -19,8 +17,6 @@ public class inputCheck : MonoBehaviour {
     public GameObject firstReq;
     public GameObject lastReq;
     public GameObject emailReq;
-    public GameObject dobReq;
-    public GameObject pnReq;
     public GameObject passReq;
 
     public string currentLevel;
@@ -36,7 +32,7 @@ public class inputCheck : MonoBehaviour {
              Debug.Log(name);
          }*/
 
-        if (username.text == "" || firstName.text == "" || lastName.text == "" || email.text == "" || dob.text == "" || pn.text == "" || password.text == "")
+        if (username.text == "" || firstName.text == "" || lastName.text == "" || email.text == "" || password.text == "")
         {
             instructions.SetActive(false);
             textIfFail.SetActive(true);
@@ -49,11 +45,7 @@ public class inputCheck : MonoBehaviour {
                 lastReq.SetActive(true);
             //if (email.text == "")
                 emailReq.SetActive(true);
-           // if (dob.text == "")
-                dobReq.SetActive(true);
-            //if (pn.text == "")
-                pnReq.SetActive(true);
-            //if (pn.text == "")
+            //if (password.text == "")
                 passReq.SetActive(true);
         }
 
@@ -63,8 +55,6 @@ public class inputCheck : MonoBehaviour {
             firstReq.SetActive(false);
             lastReq.SetActive(false);
             emailReq.SetActive(false);
-            dobReq.SetActive(false);
-            pnReq.SetActive(false);
             textIfFail.SetActive(false);
             passReq.SetActive(false);
 
@@ -72,15 +62,13 @@ public class inputCheck : MonoBehaviour {
             UserClass.player.firstName = firstName.text;
             UserClass.player.lastName = lastName.text;
             UserClass.player.email = email.text;
-            UserClass.player.dob = dob.text;
-            UserClass.player.pn = pn.text;
             UserClass.player.problemId = currentLevel;
             UserClass.player.success = true;
             UserClass.player.score = -1;
             UserClass.player.hintId = "Succesfully created a new user";
 
-            UserClass.record.Add(UserClass.player);
-            UserClass.player.printUserMain();
+          //  UserClass.record.Add(UserClass.player);
+          //  UserClass.player.printUserMain();
 
             //UserClass.player.printUser();
 

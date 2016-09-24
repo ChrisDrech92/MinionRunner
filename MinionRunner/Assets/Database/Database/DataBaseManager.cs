@@ -10,6 +10,7 @@ using UnityEngine.SceneManagement;
 public class DataBaseManager : MonoBehaviour {
 
 
+
 	/// <summary>
 	/// The connection string, this string tells the path to the database
 	/// </summary>
@@ -23,7 +24,7 @@ public class DataBaseManager : MonoBehaviour {
 
 		//Creates the database if it doesn't exist
 		CreateTable();
-	
+      
 	}
 	
 	// Update is called once per frame
@@ -46,7 +47,7 @@ public class DataBaseManager : MonoBehaviour {
 			using (IDbCommand dbCmd = dbConnection.CreateCommand()) 
 			{
 				//Create the query 
-				string sqlQuery = String.Format("CREATE TABLE if not exists StudentPI (Email TEXT PRIMARY KEY NOT NULL  UNIQUE , Password TEXT NOT NULL)");
+				string sqlQuery = String.Format("CREATE TABLE if not exists StudentPI (Email TEXT PRIMARY KEY NOT NULL  UNIQUE , Password TEXT NOT NULL, Username TEXT NOT NULL, FirstName TEXT NOT NULL, LastName TEXT NOT NULL)");
 
 				//Gives the sqlQuery to the command
 				dbCmd.CommandText = sqlQuery;
@@ -63,9 +64,9 @@ public class DataBaseManager : MonoBehaviour {
 	/// <summary>
 	/// Inserts  a new student into the database
 	/// </summary>
-	private static void InsertStudent(string email, string password, string level)
+	private static void InsertStudent(string email, string password, string username, string firstName, string lastName, string level)
 	{
-		
+
 		//Creates a database connection
 		using (IDbConnection dbConnection = new SqliteConnection(connectionString)) 
 		{
@@ -76,7 +77,7 @@ public class DataBaseManager : MonoBehaviour {
 			using (IDbCommand dbCmd = dbConnection.CreateCommand())
 			{
 				//Creates a query for inserting the new score
-			    string sqlQuery = String.Format("INSERT INTO StudentPI (Email,Password) VALUES(\"{0}\",\"{1}\")", email, password);
+			    string sqlQuery = String.Format("INSERT INTO StudentPI (Email,Password,Username,FirstName,LastName) VALUES(\"{0}\",\"{1}\",\"{2}\",\"{3}\",\"{4}\")", email, password, username, firstName, lastName);
 
 				dbCmd.CommandText = sqlQuery; //Gives the query to the commandtext
 				dbCmd.ExecuteScalar(); //Executes the query
@@ -91,8 +92,11 @@ public class DataBaseManager : MonoBehaviour {
 
     private static void GetStudent(string email, string password, string level)
     {
-        string e;
-        string p;
+        string e = null;
+        string p = null;
+        string u = null;
+        string f = null;
+        string l = null;
         int ok = 0;
 
         //Creates a database connection
@@ -117,6 +121,9 @@ public class DataBaseManager : MonoBehaviour {
                     {
                         e = reader.GetString(0);
                         p = reader.GetString(1);
+                        u = reader.GetString(2);
+                        f = reader.GetString(3);
+                        l = reader.GetString(4);
 
                         if(e == email && p == password)
                         {
@@ -126,7 +133,11 @@ public class DataBaseManager : MonoBehaviour {
                     }
 
                     if (ok == 1)
+                    {
+                        UserClass.player.firstName = f;
+                        UserClass.player.lastName = l;
                         allowLogin(level);
+                    }
                    // else denyLogin(); - currently not working because of static reference
 
                     //Closes the connection
@@ -174,9 +185,9 @@ public class DataBaseManager : MonoBehaviour {
 		}
 	}
 
-    public static void registerStudent(string email, string password, string level)
+    public static void registerStudent(string email, string password, string username, string firstName, string lastName, string level)
     {
-        InsertStudent(email, password, level);
+        InsertStudent(email, password, username, firstName, lastName, level);
     }
 
     public static void loginStudent(string email, string password, string level)
